@@ -105,7 +105,7 @@ const ProductDetails = ({product, products}) => {
                                 id="sizesGrid"
                                 className="grid grid-cols-3 gap-2"
                             >
-                                {p.size.data.map((item, i) => (
+                                {p.size?.data?.map((item, i) => (
                                     <div
                                         key={i}
                                         // className='border rounded-md text-center py-3 font-medium cursor-not-allowed bg-black/[0.1] opacity-50'
@@ -200,22 +200,38 @@ export default ProductDetails
 
 // fetch data
 
-export async function getStaticPaths() {
-    const products = await fetchDataFromApi("/api/products?populate=*");
-    const paths = products?.data?.map((p) => ({
-        params: {
-            slug: p.attributes.slug,
-        },
-    }));
+// export async function getStaticPaths() {
+//     const products = await fetchDataFromApi("/api/products?populate=*");
+//     const paths = products?.data?.map((p) => ({
+//         params: {
+//             slug: p.attributes.slug,
+//         },
+//     }));
 
-    return {
-        paths,
-        fallback: false,
-    };
-}
+//     return {
+//         paths,
+//         fallback: false,
+//     };
+// }
 
-// `getStaticPaths` requires using `getStaticProps`
-export async function getStaticProps({ params: { slug } }) {
+// // `getStaticPaths` requires using `getStaticProps`
+// export async function getStaticProps({ params: { slug } }) {
+//     const product = await fetchDataFromApi(
+//         `/api/products?populate=*&filters[slug][$eq]=${slug}`
+//     );
+//     const products = await fetchDataFromApi(
+//         `/api/products?populate=*&[filters][slug][$ne]=${slug}`
+//     );
+
+//     return {
+//         props: {
+//             product,
+//             products,
+//         },
+//     };
+// }
+
+export async function getServerSideProps({ params: { slug } }) {
     const product = await fetchDataFromApi(
         `/api/products?populate=*&filters[slug][$eq]=${slug}`
     );
